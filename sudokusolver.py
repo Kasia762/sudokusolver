@@ -12,8 +12,69 @@ class solveSudoku:
     def __init__(self,board,empty):
         self.board=board
         self.empty=empty
-        self.solve(self.board)
+        if self.sudoku(self.board):
+            self.solve(self.board)
+        else:
+            print("check the sudoku")
+            pass
+    
+    def sudoku(self,board):
+        for row in range(9):
+            for col in range(9):
+                #check single numbes
+                number = board[row][col]
+                #check if board has only numbers
+                if not isinstance(number, int):
+                    print("the board is not valid, there is a non number value: ", number)
+                    return False
+                elif number>9 or number<1:
+                    if number!=self.empty:
+                        print("board has incorrect number values, number: ", number, "is out of boundries")
+                        return False
+                    else:
+                        pass
+                else:
+                    pass
+
+        #check if numebers dont repeat in row
+        def numbersRepeat(array, listType):
+            board=array
+            for row in range(9):
+                numSet=board[row]
+                #print("row",row,numSet)
+                board_without_empty_spaces=[num for num in numSet if num!=self.empty]
+                #print("rows without empty spaces", board_without_empty_spaces)
+                unique_set=list(set(board_without_empty_spaces))
+                #print("unique_values ", unique_set)
+                if len(board_without_empty_spaces)!=len(unique_set):
+                    print(listType, row+1, "has repeating value: ", numSet)
+                    return False
+                else:
+                    pass
+
+        def getCell(board):
+            cells=[]
+            for row in range(0, 9, 3):
+                for col in range(0, 9, 3):
+                    cell=[]
+                    for i in range(3):
+                        for j in range(3):
+                            cell.append(board[row+i][col+j])
+                    cells.append(cell)
+            #print("cells", cells)
+            return cells
         
+        #check if numbers dont repeat in row  
+        numbersRepeat(board, "row")
+        #check if numbers dont repeat in column
+        transposed = [list(row) for row in zip(*board)]
+        numbersRepeat(transposed, "column")
+        #check if each 3x3 cell dont repeat any value
+        numbersRepeat(getCell(board), "cell")
+
+
+
+
     def emptySpaces(self,board):
         for row in range(9):
             for col in range(9):
